@@ -2,7 +2,7 @@
   "name": "Bridge Scoring Calculator",
   "short_name": "Bridge Score",
   "description": "Offline Bridge Scoring Calculator for contract bridge",
-  "start_url": "/index.html",
+  "start_url": "/Mikes-Bridge-Calculator/index.html",
   "display": "standalone",
   "background_color": "#2c3e50",
   "theme_color": "#4CAF50",
