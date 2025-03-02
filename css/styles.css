@@ -1,0 +1,311 @@
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Calculator Container */
+.calculator {
+    background-color: #2c3e50;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 360px;
+    overflow: hidden;
+    padding: 15px;
+}
+
+/* Display Area */
+.display {
+    background-color: #ecf0f1;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    padding: 15px;
+    text-align: right;
+}
+
+.contract-display {
+    color: #7f8c8d;
+    font-size: 30px;
+    margin-bottom: 5px;
+    min-height: 30px;
+}
+
+.contract-state-display {
+    color: #7f8c8d;
+    font-size: 18px;
+    margin-bottom: 5px;
+    min-height: 20px;
+}
+
+.result-display {
+    color: #2c3e50;
+    font-size: 36px;
+    font-weight: bold;
+    min-height: 44px;
+    text-align: center;
+}
+
+.website-link {
+    font-size: 14px;
+    margin-right: 15px;
+}
+
+.website-link a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+/* Settings Area */
+.settings {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    align-items: center;
+    cursor: pointer;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    background-color: #ccc;
+    border-radius: 34px;
+    transition: .4s;
+    vertical-align: middle;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 50%;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #e74c3c;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #e74c3c;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.label {
+    color: white;
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+/* Button Grid */
+.calculator-buttons {
+    display: grid;
+    grid-gap: 10px;
+}
+
+.button-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 10px;
+}
+
+.button-row-control {
+    margin-top: 5px;
+}
+
+.button-row-control .calculate {
+    grid-column: span 2;
+}
+
+.button-row-control .breakdown {
+    grid-column: span 2;
+}
+
+/* Button Styles */
+.btn {
+    background-color: #34495e;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    height: 50px;
+    outline: none;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+.level {
+    background-color: #3498db;
+}
+
+.suit {
+    background-color: #2ecc71;
+    font-size: 24px;
+}
+
+.suit[data-suit="H"], .suit[data-suit="D"] {
+    color: #e74c3c;
+}
+
+.trick {
+    background-color: #9b59b6;
+}
+
+.minus-trick {
+    background-color: #e74c3c;
+}
+
+.plus-trick {
+    background-color: #27ae60;
+}
+
+.contract-state {
+    background-color: #f39c12;
+}
+
+.contract-state[data-state="none"] {
+    font-size: 14px;
+}
+
+.clear {
+    background-color: #e74c3c;
+}
+
+.calculate {
+    background-color: #27ae60;
+    grid-column: span 3;
+}
+
+.breakdown {
+    background-color: #f1c40f;
+    color: #2c3e50;
+    grid-column: span 2;
+}
+
+.btn.selected {
+    outline: 3px solid white;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 400px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#breakdownContent {
+    margin-top: 15px;
+    line-height: 1.5;
+}
+
+#breakdownContent div {
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+#breakdownContent div:last-child {
+    font-weight: bold;
+    border-bottom: none;
+    margin-top: 10px;
+}
+
+/* Install Button */
+.install-container {
+    margin-top: 20px;
+    display: none;
+}
+
+.install-button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Media Queries */
+@media (max-width: 400px) {
+    .calculator {
+        padding: 10px;
+    }
+    
+    .btn {
+        height: 45px;
+        font-size: 16px;
+    }
+    
+    .contract-state[data-state="none"] {
+        font-size: 12px;
+    }
+    
+    .contract-display {
+        font-size: 18px;
+    }
+    
+    .result-display {
+        font-size: 32px;
+    }
+}

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#4CAF50">
+    <meta name="description" content="Offline Bridge Scoring Calculator">
+    <title>Bridge Scoring Calculator</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="img/favicon.ico">
+    <link rel="apple-touch-icon" href="img/icon-192.png">
+</head>
+<body>
+    <div class="calculator">
+        <div class="display">
+            <div class="contract-display" id="contractDisplay">1♣</div>
+            <div class="contract-state-display" id="contractStateDisplay"></div>
+            <div class="result-display" id="resultDisplay">0</div>
+        </div>
+        
+        <div class="settings">
+            <div class="website-link"><a href="https://BridgeScorer.com" target="_blank">BridgeScorer.com</a></div>
+            <label class="switch">
+                <input type="checkbox" id="vulnerableToggle">
+                <span class="slider"></span>
+                <span class="label">Vulnerable</span>
+            </label>
+        </div>
+        
+        <div class="calculator-buttons">
+            <div class="button-row">
+                <button class="btn level" data-level="1">1</button>
+                <button class="btn level" data-level="2">2</button>
+                <button class="btn level" data-level="3">3</button>
+                <button class="btn level" data-level="4">4</button>
+                <button class="btn clear" id="clearBtn">C</button>
+            </div>
+            <div class="button-row">
+                <button class="btn level" data-level="5">5</button>
+                <button class="btn level" data-level="6">6</button>
+                <button class="btn level" data-level="7">7</button>
+                <button class="btn contract-state" data-state="doubled">X</button>
+                <button class="btn contract-state" data-state="redoubled">XX</button>
+            </div>
+            <div class="button-row">
+                <button class="btn suit" data-suit="C">♣</button>
+                <button class="btn suit" data-suit="D">♦</button>
+                <button class="btn suit" data-suit="H">♥</button>
+                <button class="btn suit" data-suit="S">♠</button>
+                <button class="btn suit" data-suit="NT">NT</button>
+            </div>
+            <div class="button-row">
+                <button class="btn trick minus-trick" data-trick="-1">-1</button>
+                <button class="btn trick minus-trick" data-trick="-2">-2</button>
+                <button class="btn trick minus-trick" data-trick="-3">-3</button>
+                <button class="btn trick minus-trick" data-trick="-4">-4</button>
+                <button class="btn trick minus-trick" data-trick="-5">-5</button>
+            </div>
+            <div class="button-row">
+                <button class="btn trick plus-trick" data-trick="+1">+1</button>
+                <button class="btn trick plus-trick" data-trick="+2">+2</button>
+                <button class="btn trick plus-trick" data-trick="+3">+3</button>
+                <button class="btn trick plus-trick" data-trick="+4">+4</button>
+                <button class="btn trick plus-trick" data-trick="+5">+5</button>
+            </div>
+            <div class="button-row button-row-control">
+                <button class="btn calculate" id="calculateBtn">Calculate</button>
+                <button class="btn" id="newContractBtn">New</button>
+                <button class="btn breakdown" id="breakdownBtn">Breakdown</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="breakdownModal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Score Breakdown</h2>
+            <div id="breakdownContent"></div>
+        </div>
+    </div>
+    
+    <div class="install-container">
+        <button id="installBtn" class="install-button">Install App</button>
+    </div>
+    
+    <script src="js/BridgeScoring.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/install.js"></script>
+    <script>
+        // Register service worker for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => {
+                        console.log('Service Worker registered with scope:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
