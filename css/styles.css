@@ -146,14 +146,6 @@ input:checked + .slider:before {
     margin-top: 5px;
 }
 
-.button-row-control .calculate {
-    grid-column: span 2;
-}
-
-.button-row-control .breakdown {
-    grid-column: span 2;
-}
-
 /* Button Styles */
 .btn {
     background-color: #34495e;
@@ -175,12 +167,21 @@ input:checked + .slider:before {
     background-color: #3498db;
 }
 
-.suit {
+/* Suit Buttons - Updated with larger font size */
+.btn.suit {
     background-color: #2ecc71;
-    font-size: 24px;
+    font-size: 28px;
+    font-weight: bold;
 }
 
-.suit[data-suit="H"], .suit[data-suit="D"] {
+/* Updated color specifications for suits */
+.btn.suit[data-suit="C"],
+.btn.suit[data-suit="S"] {
+    color: black;
+}
+
+.btn.suit[data-suit="D"],
+.btn.suit[data-suit="H"] {
     color: #e74c3c;
 }
 
@@ -196,6 +197,15 @@ input:checked + .slider:before {
     background-color: #27ae60;
 }
 
+/* Styling for +6 and -6 trick buttons */
+.btn.trick[data-trick="-6"] {
+    background-color: #e74c3c;
+}
+
+.btn.trick[data-trick="+6"] {
+    background-color: #27ae60;
+}
+
 .contract-state {
     background-color: #f39c12;
 }
@@ -208,15 +218,24 @@ input:checked + .slider:before {
     background-color: #e74c3c;
 }
 
-.calculate {
-    background-color: #27ae60;
-    grid-column: span 3;
-}
-
-.breakdown {
+/* Updated breakdown button styling */
+.btn.breakdown {
     background-color: #f1c40f;
     color: #2c3e50;
-    grid-column: span 2;
+    font-size: 22px; /* Slightly larger for the icon */
+    width: 100%;
+    grid-column: auto; /* Ensure no column span */
+}
+
+/* Calculator switcher buttons */
+.calc-switcher {
+    background-color: #3498db;
+    color: white;
+    font-weight: bold;
+}
+
+#currencyCalcBtn {
+    background-color: #8e44ad; /* Purple color for currency button */
 }
 
 .btn.selected {
@@ -284,6 +303,102 @@ input:checked + .slider:before {
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+}
+
+/* Tab styling */
+.calculator-tabs {
+    display: flex;
+    width: 100%;
+}
+
+.tab-button {
+    flex: 1;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.tab-button.active {
+    opacity: 1;
+    font-weight: bold;
+}
+
+/* Hide inactive calculator content */
+.calculator-content {
+    display: none;
+}
+
+.calculator-content.active {
+    display: block;
+}
+
+/* Regular calculator styling */
+#regular-calculator {
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+}
+
+.calculator-display {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#calc-display {
+    width: 100%;
+    padding: 10px;
+    font-size: 24px;
+    text-align: right;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.calculator-keys {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 8px;
+}
+
+.calc-key {
+    padding: 15px 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.calc-key[data-action="calculate"] {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.calc-key[data-action="clear"] {
+    background-color: #f44336;
+    color: white;
+}
+
+.calc-key[data-action="operator"] {
+    background-color: #2196F3;
+    color: white;
+}
+
+/* Currency calculator styling */
+#currency-calculator .currency-selection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    color: white;
+}
+
+#currency-calculator select {
+    padding: 5px;
+    margin: 0 5px;
+    border-radius: 4px;
 }
 
 /* Media Queries */
