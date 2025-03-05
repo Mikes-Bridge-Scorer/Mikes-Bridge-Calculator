@@ -11,6 +11,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const breakdownContent = document.getElementById('breakdownContent');
     const closeModal = document.querySelector('.close');
     
+    // Calculator switcher buttons
+    const regularCalcBtn = document.getElementById('regularCalcBtn');
+    const currencyCalcBtn = document.getElementById('currencyCalcBtn');
+    const bridgeCalcBtnFromCurr = document.getElementById('bridgeCalcBtnFromCurr');
+    const regularCalcBtnFromCurr = document.getElementById('regularCalcBtnFromCurr');
+    
     // State variables
     let currentLevel = null;
     let currentSuit = null;
@@ -25,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function init() {
         bindEvents();
         clearCalculator(true);
+        console.log("Bridge calculator app initialized");
     }
     
     function bindEvents() {
@@ -85,18 +92,31 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        // Calculator switcher buttons (placeholders)
-        const regularCalcBtn = document.getElementById('regularCalcBtn');
+        // Calculator switcher buttons
         if (regularCalcBtn) {
+            console.log("Regular calculator button found:", !!regularCalcBtn);
             regularCalcBtn.addEventListener('click', () => {
-                alert('Regular Calculator - Coming Soon!');
+                console.log("Adding click event to 123 button");
+                switchToRegularCalculator();
             });
         }
         
-        const currencyCalcBtn = document.getElementById('currencyCalcBtn');
         if (currencyCalcBtn) {
             currencyCalcBtn.addEventListener('click', () => {
-                alert('Currency Calculator - Coming Soon!');
+                switchToCurrencyCalculator();
+            });
+        }
+        
+        // Bind bridge and regular calculator buttons from currency calculator if they exist
+        if (bridgeCalcBtnFromCurr) {
+            bridgeCalcBtnFromCurr.addEventListener('click', () => {
+                switchToBridgeCalculator();
+            });
+        }
+        
+        if (regularCalcBtnFromCurr) {
+            regularCalcBtnFromCurr.addEventListener('click', () => {
+                switchToRegularCalculator();
             });
         }
     }
@@ -309,4 +329,37 @@ document.addEventListener('DOMContentLoaded', function() {
         breakdownContent.innerHTML = content;
         breakdownModal.style.display = 'block';
     }
+    
+    // Calculator switching functions
+    function switchToRegularCalculator() {
+        document.getElementById('bridge-calculator').style.display = 'none';
+        document.getElementById('regular-calculator').style.display = 'block';
+        if (document.getElementById('currency-calculator')) {
+            document.getElementById('currency-calculator').style.display = 'none';
+        }
+        console.log("Switching to regular calculator");
+    }
+    
+    function switchToCurrencyCalculator() {
+        document.getElementById('bridge-calculator').style.display = 'none';
+        document.getElementById('regular-calculator').style.display = 'none';
+        if (document.getElementById('currency-calculator')) {
+            document.getElementById('currency-calculator').style.display = 'block';
+        } else {
+            alert("Currency calculator coming soon!");
+        }
+    }
+    
+    function switchToBridgeCalculator() {
+        document.getElementById('regular-calculator').style.display = 'none';
+        if (document.getElementById('currency-calculator')) {
+            document.getElementById('currency-calculator').style.display = 'none';
+        }
+        document.getElementById('bridge-calculator').style.display = 'block';
+    }
+    
+    // You can test calculator switching directly in the console
+    console.log("You can test calculator switching directly in the console by running:");
+    console.log("document.getElementById('bridge-calculator').style.display = 'none';");
+    console.log("document.getElementById('regular-calculator').style.display = 'block';");
 });

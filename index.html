@@ -12,7 +12,8 @@
     <link rel="apple-touch-icon" href="img/icon-192.png">
 </head>
 <body>
-    <div class="calculator">
+    <!-- Bridge Calculator -->
+    <div class="calculator" id="bridge-calculator">
         <div class="display">
             <div class="contract-display" id="contractDisplay"></div>
             <div class="contract-state-display" id="contractStateDisplay"></div>
@@ -86,42 +87,44 @@
     <!-- Regular calculator (initially hidden) -->
     <div class="calculator" id="regular-calculator" style="display: none;">
         <div class="display">
+            <div class="expression-display" id="expressionDisplay"></div>
             <div class="result-display" id="regularCalcDisplay">0</div>
         </div>
         
         <div class="calculator-buttons">
             <div class="button-row">
                 <button class="btn calc-key" data-action="clear">C</button>
-                <button class="btn calc-key" data-action="backspace">⌫</button>
+                <button class="btn calc-key" data-action="ce">CE</button>
                 <button class="btn calc-key" data-action="percent">%</button>
-                <button class="btn calc-key" data-action="operator">÷</button>
+                <button class="btn calc-key operator" data-action="operator">÷</button>
             </div>
             <div class="button-row">
-                <button class="btn calc-key" data-value="7">7</button>
-                <button class="btn calc-key" data-value="8">8</button>
-                <button class="btn calc-key" data-value="9">9</button>
-                <button class="btn calc-key" data-action="operator">×</button>
+                <button class="btn calc-key number" data-value="7">7</button>
+                <button class="btn calc-key number" data-value="8">8</button>
+                <button class="btn calc-key number" data-value="9">9</button>
+                <button class="btn calc-key operator" data-action="operator">×</button>
             </div>
             <div class="button-row">
-                <button class="btn calc-key" data-value="4">4</button>
-                <button class="btn calc-key" data-value="5">5</button>
-                <button class="btn calc-key" data-value="6">6</button>
-                <button class="btn calc-key" data-action="operator">-</button>
+                <button class="btn calc-key number" data-value="4">4</button>
+                <button class="btn calc-key number" data-value="5">5</button>
+                <button class="btn calc-key number" data-value="6">6</button>
+                <button class="btn calc-key operator" data-action="operator">-</button>
             </div>
             <div class="button-row">
-                <button class="btn calc-key" data-value="1">1</button>
-                <button class="btn calc-key" data-value="2">2</button>
-                <button class="btn calc-key" data-value="3">3</button>
-                <button class="btn calc-key" data-action="operator">+</button>
+                <button class="btn calc-key number" data-value="1">1</button>
+                <button class="btn calc-key number" data-value="2">2</button>
+                <button class="btn calc-key number" data-value="3">3</button>
+                <button class="btn calc-key operator" data-action="operator">+</button>
             </div>
             <div class="button-row">
-                <button class="btn calc-key" data-value="0">0</button>
-                <button class="btn calc-key" data-value=".">.</button>
-                <button class="btn calc-key" data-action="calculate">=</button>
+                <button class="btn calc-key number" data-value="0">0</button>
+                <button class="btn calc-key number" data-value=".">.</button>
+                <button class="btn calc-key" data-action="sqrt">√</button>
+                <button class="btn calc-key equals" data-action="calculate">=</button>
             </div>
-            <div class="button-row">
-                <button class="btn calc-switcher" id="bridgeCalcBtn">Bridge</button>
-                <button class="btn calc-switcher" id="currencyCalcBtnFromReg">£/€/$</button>
+            <div class="button-row bottom-buttons">
+                <button class="btn calc-switcher bridge-btn" id="bridgeCalcBtn">Bridge</button>
+                <button class="btn calc-switcher currency-btn" id="currencyCalcBtnFromReg">£/€/$</button>
             </div>
         </div>
     </div>
@@ -170,8 +173,8 @@
                 <button class="btn calc-key" data-value=".">.</button>
                 <button class="btn calc-key" data-action="convert">Convert</button>
             </div>
-            <div class="button-row">
-                <button class="btn calc-switcher" id="bridgeCalcBtnFromCurr">Bridge</button>
+            <div class="button-row bottom-buttons">
+                <button class="btn calc-switcher bridge-btn" id="bridgeCalcBtnFromCurr">Bridge</button>
                 <button class="btn calc-switcher" id="regularCalcBtnFromCurr">123</button>
             </div>
         </div>
@@ -183,7 +186,7 @@
     
     <script src="js/BridgeScoring.js"></script>
     <script src="js/app.js"></script>
-<script src="js/regular-calculator.js"></script>
+    <script src="js/regular-calculator.js"></script>
     <script src="js/install.js"></script>
     <script>
         // Register service worker for PWA
