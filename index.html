@@ -129,22 +129,59 @@
         </div>
     </div>
     
-    <!-- Currency calculator (initially hidden) -->
+    <!-- Enhanced Currency calculator with centered layout -->
     <div class="calculator" id="currency-calculator" style="display: none;">
-        <div class="display">
+        <div class="display currency-display">
             <div class="result-display" id="currencyCalcDisplay">0</div>
-            <div class="currency-selection">
-                <select id="fromCurrency">
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                    <option value="GBP">GBP</option>
-                </select>
-                <span>→</span>
-                <select id="toCurrency">
-                    <option value="EUR">EUR</option>
-                    <option value="USD">USD</option>
-                    <option value="GBP">GBP</option>
-                </select>
+            
+            <div class="currency-info">
+                <!-- Tab Navigation -->
+                <div class="calculator-tabs">
+                    <button class="tab-button active" data-tab="currency">Currency</button>
+                    <button class="tab-button" data-tab="indices">Indices</button>
+                </div>
+                
+                <!-- Currency Tab Content -->
+                <div class="calculator-content active" id="currency-content">
+                    <div class="currency-selection">
+                        <select id="fromCurrency" class="currency-select">
+                            <option value="USD">USD</option>
+                            <option value="EUR">EUR</option>
+                            <option value="GBP">GBP</option>
+                            <option value="JPY">JPY</option>
+                            <option value="CAD">CAD</option>
+                            <option value="AUD">AUD</option>
+                            <option value="CHF">CHF</option>
+                            <option value="ZAR">ZAR</option>
+                        </select>
+                        <span class="currency-arrow">→</span>
+                        <select id="toCurrency" class="currency-select">
+                            <option value="EUR">EUR</option>
+                            <option value="USD">USD</option>
+                            <option value="GBP">GBP</option>
+                            <option value="JPY">JPY</option>
+                            <option value="CAD">CAD</option>
+                            <option value="AUD">AUD</option>
+                            <option value="CHF">CHF</option>
+                            <option value="ZAR">ZAR</option>
+                        </select>
+                    </div>
+                    
+                    <div id="lastUpdated" class="last-updated">Rates updated: Not yet updated</div>
+                    
+                    <div class="mini-chart-container">
+                        <div id="rateChart" class="mini-chart"></div>
+                    </div>
+                </div>
+                
+                <!-- Indices Tab Content (hidden initially) -->
+                <div class="calculator-content" id="indices-content" style="display: none;">
+                    <div id="indicesContainer" class="indices-container">
+                        <!-- Indices will be displayed here -->
+                        <div class="loading-indices">Loading indices data...</div>
+                    </div>
+                    <div id="indicesLastUpdated" class="last-updated">Indices updated: Not yet updated</div>
+                </div>
             </div>
         </div>
         
@@ -152,6 +189,7 @@
             <div class="button-row">
                 <button class="btn calc-key" data-action="clear">C</button>
                 <button class="btn calc-key" data-action="backspace">⌫</button>
+                <button class="btn calc-key refresh-btn" data-action="refresh" id="refreshRates">↻</button>
             </div>
             <div class="button-row">
                 <button class="btn calc-key" data-value="7">7</button>
@@ -171,7 +209,7 @@
             <div class="button-row">
                 <button class="btn calc-key" data-value="0">0</button>
                 <button class="btn calc-key" data-value=".">.</button>
-                <button class="btn calc-key" data-action="convert">Convert</button>
+                <button class="btn calc-key convert-btn" data-action="convert">Convert</button>
             </div>
             <div class="button-row bottom-buttons">
                 <button class="btn calc-switcher bridge-btn" id="bridgeCalcBtnFromCurr">Bridge</button>
@@ -187,6 +225,7 @@
     <script src="js/BridgeScoring.js"></script>
     <script src="js/app.js"></script>
     <script src="js/regular-calculator.js"></script>
+    <script src="js/financial-calculator.js"></script>
     <script src="js/install.js"></script>
     <script>
         // Register service worker for PWA

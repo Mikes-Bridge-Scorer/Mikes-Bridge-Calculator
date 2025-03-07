@@ -503,3 +503,489 @@ input:checked + .slider:before {
         font-size: 32px;
     }
 }
+/* Simplified Currency Calculator Styles */
+
+/* Currency Selection */
+#currency-calculator .currency-selection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#currency-calculator select {
+    padding: 5px;
+    margin: 0 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 16px;
+}
+
+/* Convert Button */
+#currency-calculator .convert-btn {
+    background-color: #34495e; 
+    color: white;
+}
+
+/* Specific button styling */
+#currency-calculator .calc-key {
+    background-color: #34495e;
+    color: white;
+    font-weight: bold;
+}
+
+#currency-calculator .bridge-btn {
+    background-color: #3498db;
+}
+
+/* Make sure the display works correctly */
+#currency-calculator .display {
+    background-color: #ecf0f1;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    padding: 15px;
+    text-align: center;
+}
+
+#currency-calculator .result-display {
+    color: #2c3e50;
+    font-size: 36px;
+    font-weight: bold;
+    min-height: 44px;
+    text-align: center;
+}
+/* Enhanced Currency Calculator Styles */
+
+/* Currency display */
+.currency-display {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 0;
+}
+
+.currency-info {
+    margin-top: 10px;
+    padding: 5px;
+    border-top: 1px solid #ddd;
+    font-size: 14px;
+}
+
+/* Currency selection */
+.currency-selection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.currency-select {
+    padding: 8px;
+    border: 1px solid #3498db;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 16px;
+    min-width: 80px;
+    color: #2c3e50;
+    font-weight: bold;
+    outline: none;
+}
+
+.currency-select:focus {
+    border-color: #2980b9;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+.currency-arrow {
+    margin: 0 10px;
+    color: #7f8c8d;
+    font-weight: bold;
+}
+
+/* Last updated timestamp */
+.last-updated {
+    text-align: center;
+    font-size: 12px;
+    color: #7f8c8d;
+    margin: 5px 0;
+    font-style: italic;
+}
+
+/* Mini chart */
+.mini-chart-container {
+    margin: 10px 0 5px;
+}
+
+.mini-chart {
+    height: 50px;
+    width: 100%;
+    position: relative;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+/* Refresh button */
+.refresh-btn {
+    background-color: #3498db !important;
+    font-size: 18px !important;
+}
+
+/* Convert button */
+.convert-btn {
+    background-color: #2ecc71 !important;
+    color: white !important;
+    font-weight: bold !important;
+}
+
+/* Toast messages */
+.calculator-message {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+
+.calculator-message.success {
+    background-color: #2ecc71;
+}
+
+.calculator-message.error {
+    background-color: #e74c3c;
+}
+
+/* Make sure the currency calculator buttons match the style of other calculators */
+#currency-calculator .calc-key {
+    background-color: #34495e;
+    color: white;
+    font-weight: bold;
+}
+
+#currency-calculator .bridge-btn {
+    background-color: #3498db !important;
+}
+
+/* Better display formatting for conversion results */
+#currency-calculator .result-display {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 28px;
+    font-weight: bold;
+    color: #2c3e50;
+    text-align: center;
+    margin: 0;
+    padding: 10px 5px;
+}
+
+/* Make sure the calculator is properly sized */
+#currency-calculator {
+    max-width: 360px;
+    margin: 0 auto;
+}
+/* CSS Updates to center calculator buttons and improve spacing */
+
+/* For the currency calculator specifically */
+#currency-calculator .calculator-buttons {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#currency-calculator .button-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+/* Special case for the top row with 3 buttons */
+#currency-calculator .button-row:first-child {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* Make buttons larger and more evenly spaced */
+#currency-calculator .calc-key {
+    height: 55px;
+    font-size: 20px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+/* Ensure the convert button stands out */
+#currency-calculator .convert-btn {
+    background-color: #2ecc71 !important;
+    font-weight: bold !important;
+    font-size: 20px !important;
+}
+
+/* Improve the bottom row spacing */
+#currency-calculator .bottom-buttons {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 5px;
+}
+
+/* Better display area styling */
+#currency-calculator .display {
+    padding: 18px 15px;
+    margin-bottom: 18px;
+}
+
+/* Improved result display */
+#currency-calculator .result-display {
+    font-size: 32px;
+    line-height: 1.2;
+    padding: 5px 0;
+}
+
+/* Currency info section */
+.currency-info {
+    padding: 10px 5px;
+}
+
+/* Chart area styling */
+.mini-chart {
+    margin-top: 10px;
+    height: 60px !important;
+}
+
+/* Make the refresh button more prominent */
+.refresh-btn {
+    background-color: #3498db !important;
+    font-size: 22px !important;
+}
+/* Mobile-friendly height adjustments */
+
+/* Reduce overall display height */
+#currency-calculator .display {
+    padding: 10px 15px;
+    margin-bottom: 10px;
+}
+
+#currency-calculator .result-display {
+    font-size: 28px;
+    min-height: 34px;
+    padding: 2px 0;
+}
+
+/* Make currency selectors more compact */
+.currency-selection {
+    margin: 5px 0;
+}
+
+.currency-select {
+    padding: 4px;
+    font-size: 14px;
+    min-width: 70px;
+}
+
+/* Make tab buttons smaller */
+.calculator-tabs {
+    margin-bottom: 8px;
+}
+
+.tab-button {
+    padding: 6px 0;
+    font-size: 13px;
+}
+
+/* Make last updated text smaller */
+.last-updated {
+    font-size: 10px;
+    margin: 2px 0;
+}
+
+/* Reduce chart height */
+.mini-chart {
+    height: 40px !important;
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+
+.mini-chart-container {
+    margin: 5px 0 2px;
+}
+
+/* Make indices container more compact */
+.indices-container {
+    max-height: 150px;
+    padding: 3px;
+}
+
+.index-item {
+    padding: 4px 6px;
+    margin-bottom: 2px;
+}
+
+.index-name {
+    font-size: 12px;
+}
+
+.index-value {
+    font-size: 12px;
+}
+
+.index-change {
+    font-size: 10px;
+    padding: 1px 3px;
+}
+
+/* Make calculator buttons more compact */
+#currency-calculator .calculator-buttons {
+    grid-gap: 8px;
+}
+
+#currency-calculator .button-row {
+    grid-gap: 8px;
+    margin-bottom: 8px;
+}
+
+#currency-calculator .calc-key {
+    height: 45px;
+    font-size: 18px;
+}
+
+/* Bottom buttons adjustment */
+#currency-calculator .bottom-buttons {
+    margin-top: 2px;
+}
+
+/* Specify a max-height for the entire calculator */
+.calculator {
+    max-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Additional media query for very small screens */
+@media (max-height: 640px) {
+    #currency-calculator .calc-key {
+        height: 40px;
+        font-size: 16px;
+    }
+    
+    #currency-calculator .button-row {
+        grid-gap: 6px;
+        margin-bottom: 6px;
+    }
+    
+    .mini-chart {
+        height: 30px !important;
+    }
+    
+    .indices-container {
+        max-height: 120px;
+    }
+}
+/* Two-column indices layout */
+
+/* Container for two columns */
+.indices-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-height: 160px;
+    overflow-y: auto;
+    padding: 4px;
+    margin-bottom: 5px; /* Add space before the timestamp */
+}
+
+/* Make each index item take half width */
+.index-item {
+    width: 48%;
+    padding: 4px;
+    margin-bottom: 3px;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+
+/* Stack elements vertically within each index item */
+.index-item {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Index name styling */
+.index-name {
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Value container is now horizontal */
+.index-value-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Value styling */
+.index-value {
+    font-size: 11px;
+}
+
+/* Change indicator styling */
+.index-change {
+    font-size: 9px;
+    padding: 1px 3px;
+    border-radius: 2px;
+    min-width: 32px;
+    text-align: center;
+}
+
+/* Make sure the last updated text is clear from the indices */
+#indicesLastUpdated {
+    clear: both;
+    margin-top: 5px;
+    padding-top: 2px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Loading state */
+.loading-indices {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+}
+
+/* Media query for wider screens to allow more indices to show */
+@media (min-width: 380px) {
+    .indices-container {
+        max-height: 180px;
+    }
+    
+    .index-item {
+        width: 49%;
+        padding: 5px;
+    }
+    
+    .index-name {
+        font-size: 12px;
+    }
+    
+    .index-value {
+        font-size: 12px;
+    }
+    
+    .index-change {
+        font-size: 10px;
+    }
+}
