@@ -16,8 +16,9 @@
     <div class="calculator" id="bridge-calculator">
         <div class="display">
             <div class="contract-display" id="contractDisplay"></div>
-            <div class="contract-state-display" id="contractStateDisplay"></div>
+            
             <div class="result-display" id="resultDisplay"></div>
+            <div class="contract-state-display" id="contractStateDisplay"></div>
         </div>
         
         <div class="settings">
@@ -132,12 +133,13 @@
     <!-- Enhanced Currency calculator with centered layout -->
     <div class="calculator" id="currency-calculator" style="display: none;">
         <div class="display currency-display">
-            <div class="result-display" id="currencyCalcDisplay">0</div>
             
             <div class="currency-info">
                 <!-- Tab Navigation -->
                 <div class="calculator-tabs">
                     <button class="tab-button active" data-tab="currency">Currency</button>
+                    
+            
                     <button class="tab-button" data-tab="indices">Indices</button>
                 </div>
                 
@@ -168,7 +170,7 @@
                     </div>
                     
                     <div id="lastUpdated" class="last-updated">Rates updated: Not yet updated</div>
-                    
+                    <div class="result-display" id="currencyCalcDisplay">0</div>
                     <div class="mini-chart-container">
                         <div id="rateChart" class="mini-chart"></div>
                     </div>
