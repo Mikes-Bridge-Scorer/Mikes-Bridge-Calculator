@@ -10,6 +10,105 @@
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="img/favicon.ico">
     <link rel="apple-touch-icon" href="img/icon-192.png">
+    <style>
+        /* Additional styles for new features */
+        .settings {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 10px;
+        }
+        
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .credits {
+            font-size: 10px;
+            color: #ffffff;
+            text-align: center;
+            margin-top: 5px;
+            opacity: 0.8;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .switch {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: relative;
+            width: 40px;
+            height: 20px;
+            background-color: #555;
+            border-radius: 20px;
+            transition: .4s;
+            cursor: pointer;
+            border: 1px solid #777;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        
+        input:checked + .slider {
+            background-color: #4CAF50;
+            border-color: #45a049;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        
+        .label {
+            font-size: 12px;
+            color: #ffffff;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .wake-lock-status {
+            font-size: 9px;
+            color: #cccccc;
+            margin-left: 3px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .settings-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .switch {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Bridge Calculator -->
@@ -22,12 +121,24 @@
         </div>
         
         <div class="settings">
-            <div class="website-link"><a href="https://BridgeScorer.com" target="_blank">BridgeScorer.com</a></div>
-            <label class="switch">
-                <input type="checkbox" id="vulnerableToggle">
-                <span class="slider"></span>
-                <span class="label">Vulnerable</span>
-            </label>
+            <div class="settings-row">
+                <label class="switch">
+                    <input type="checkbox" id="vulnerableToggle">
+                    <span class="slider"></span>
+                    <span class="label">Vulnerable</span>
+                </label>
+                
+                <label class="switch">
+                    <input type="checkbox" id="keepAwakeToggle">
+                    <span class="slider"></span>
+                    <span class="label">Keep Awake</span>
+                    <span class="wake-lock-status" id="wakeLockStatus"></span>
+                </label>
+            </div>
+            
+            <div class="credits">
+                © 2025 Mike Smith - All Rights Reserved
+            </div>
         </div>
         
         <div class="calculator-buttons">
@@ -84,7 +195,7 @@
             <div id="breakdownContent"></div>
         </div>
     </div>
-    
+
     <!-- Regular calculator (initially hidden) -->
     <div class="calculator" id="regular-calculator" style="display: none;">
         <div class="display">
@@ -129,60 +240,27 @@
             </div>
         </div>
     </div>
-    
-    <!-- Enhanced Currency calculator with centered layout -->
+
+    <!-- Enhanced Currency calculator with 40+ currencies and better chart -->
     <div class="calculator" id="currency-calculator" style="display: none;">
         <div class="display currency-display">
-            
             <div class="currency-info">
-                <!-- Tab Navigation -->
-                <div class="calculator-tabs">
-                    <button class="tab-button active" data-tab="currency">Currency</button>
-                    
-            
-                    <button class="tab-button" data-tab="indices">Indices</button>
+                <div class="currency-selection">
+                    <select id="fromCurrency" class="currency-select">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                    <span class="currency-arrow">→</span>
+                    <select id="toCurrency" class="currency-select">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
                 </div>
                 
-                <!-- Currency Tab Content -->
-                <div class="calculator-content active" id="currency-content">
-                    <div class="currency-selection">
-                        <select id="fromCurrency" class="currency-select">
-                            <option value="USD">USD</option>
-                            <option value="EUR">EUR</option>
-                            <option value="GBP">GBP</option>
-                            <option value="JPY">JPY</option>
-                            <option value="CAD">CAD</option>
-                            <option value="AUD">AUD</option>
-                            <option value="CHF">CHF</option>
-                            <option value="ZAR">ZAR</option>
-                        </select>
-                        <span class="currency-arrow">→</span>
-                        <select id="toCurrency" class="currency-select">
-                            <option value="EUR">EUR</option>
-                            <option value="USD">USD</option>
-                            <option value="GBP">GBP</option>
-                            <option value="JPY">JPY</option>
-                            <option value="CAD">CAD</option>
-                            <option value="AUD">AUD</option>
-                            <option value="CHF">CHF</option>
-                            <option value="ZAR">ZAR</option>
-                        </select>
-                    </div>
-                    
-                    <div id="lastUpdated" class="last-updated">Rates updated: Not yet updated</div>
-                    <div class="result-display" id="currencyCalcDisplay">0</div>
-                    <div class="mini-chart-container">
-                        <div id="rateChart" class="mini-chart"></div>
-                    </div>
-                </div>
+                <div id="lastUpdated" class="last-updated">Rates updated: Loading...</div>
+                <div class="result-display" id="currencyCalcDisplay">0</div>
                 
-                <!-- Indices Tab Content (hidden initially) -->
-                <div class="calculator-content" id="indices-content" style="display: none;">
-                    <div id="indicesContainer" class="indices-container">
-                        <!-- Indices will be displayed here -->
-                        <div class="loading-indices">Loading indices data...</div>
-                    </div>
-                    <div id="indicesLastUpdated" class="last-updated">Indices updated: Not yet updated</div>
+                <!-- Enhanced chart container -->
+                <div class="enhanced-chart-container">
+                    <div id="rateChart" class="enhanced-chart"></div>
                 </div>
             </div>
         </div>
@@ -219,7 +297,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="install-container">
         <button id="installBtn" class="install-button">Install App</button>
     </div>
@@ -229,19 +307,84 @@
     <script src="js/regular-calculator.js"></script>
     <script src="js/financial-calculator.js"></script>
     <script src="js/install.js"></script>
+    
     <script>
-        // Register service worker for PWA
+        // Keep Awake functionality - Improved error handling
+        let wakeLock = null;
+        const keepAwakeToggle = document.getElementById('keepAwakeToggle');
+        const wakeLockStatus = document.getElementById('wakeLockStatus');
+        
+        // Check if Wake Lock API is supported
+        const supportsWakeLock = 'wakeLock' in navigator;
+        
+        if (!supportsWakeLock) {
+            if (keepAwakeToggle) keepAwakeToggle.disabled = true;
+            if (wakeLockStatus) wakeLockStatus.textContent = '(Not supported)';
+        }
+        
+        async function requestWakeLock() {
+            if (!supportsWakeLock) return;
+            
+            try {
+                wakeLock = await navigator.wakeLock.request('screen');
+                if (wakeLockStatus) {
+                    wakeLockStatus.textContent = '(Active)';
+                }
+                console.log('Wake lock active');
+                
+                wakeLock.addEventListener('release', () => {
+                    console.log('Wake lock released');
+                    if (wakeLockStatus) {
+                        wakeLockStatus.textContent = '';
+                    }
+                });
+            } catch (err) {
+                console.error('Wake lock failed:', err);
+                if (wakeLockStatus) {
+                    wakeLockStatus.textContent = '(Failed)';
+                }
+                if (keepAwakeToggle) {
+                    keepAwakeToggle.checked = false;
+                }
+            }
+        }
+        
+        async function releaseWakeLock() {
+            if (wakeLock) {
+                try {
+                    await wakeLock.release();
+                    wakeLock = null;
+                    if (wakeLockStatus) {
+                        wakeLockStatus.textContent = '';
+                    }
+                    console.log('Wake lock released manually');
+                } catch (err) {
+                    console.error('Wake lock release failed:', err);
+                }
+            }
+        }
+        
+        if (keepAwakeToggle) {
+            keepAwakeToggle.addEventListener('change', async () => {
+                if (keepAwakeToggle.checked) {
+                    await requestWakeLock();
+                } else {
+                    await releaseWakeLock();
+                }
+            });
+        }
+        
+        // Handle visibility change (when tab becomes hidden/visible)
+        document.addEventListener('visibilitychange', async () => {
+            if (wakeLock !== null && document.visibilityState === 'visible' && 
+                keepAwakeToggle && keepAwakeToggle.checked) {
+                await requestWakeLock();
+            }
+        });
+        
+        // Register service worker for PWA - Improved error handling
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('service-worker.js')
                     .then(registration => {
-                        console.log('Service Worker registered with scope:', registration.scope);
-                    })
-                    .catch(error => {
-                        console.log('Service Worker registration failed:', error);
-                    });
-            });
-        }
-    </script>
-</body>
-</html>
+                        console.log('Service
