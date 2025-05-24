@@ -1,10 +1,12 @@
-// Main application logic for Bridge Scoring Calculator
+// The Main application logic for Bridge Scoring Calculator
 document.addEventListener('DOMContentLoaded', function() {
     // DOM Elements
     const contractDisplay = document.getElementById('contractDisplay');
     const contractStateDisplay = document.getElementById('contractStateDisplay');
     const resultDisplay = document.getElementById('resultDisplay');
     const vulnerableToggle = document.getElementById('vulnerableToggle');
+    const keepAwakeToggle = document.getElementById('keepAwakeToggle');
+    const wakeLockStatus = document.getElementById('wakeLockStatus');
     const clearBtn = document.getElementById('clearBtn');
     const breakdownBtn = document.getElementById('breakdownBtn');
     const breakdownModal = document.getElementById('breakdownModal');
@@ -25,13 +27,63 @@ document.addEventListener('DOMContentLoaded', function() {
     let doubledState = 'none'; // 'none', 'doubled', or 'redoubled'
     let scorer = BridgeScoring.createScorer();
     
+    // Wake Lock variables
+    let wakeLock = null;
+    const supportsWakeLock = 'wakeLock' in navigator;
+    
     // Initialize
     init();
     
     function init() {
         bindEvents();
+        initializeWakeLock();
         clearCalculator(true);
         console.log("Bridge calculator app initialized");
+    }
+    
+    function initializeWakeLock() {
+        if (!supportsWakeLock && keepAwakeToggle && wakeLockStatus) {
+            keepAwakeToggle.disabled = true;
+            wakeLockStatus.textContent = '(Not supported)';
+        }
+    }
+    
+    async function requestWakeLock() {
+        if (!supportsWakeLock) return;
+        
+        try {
+            wakeLock = await navigator.wakeLock.request('screen');
+            if (wakeLockStatus) {
+                wakeLockStatus.textContent = '(Active)';
+            }
+            console.log('Wake lock active');
+            
+            wakeLock.addEventListener('release', () => {
+                console.log('Wake lock released');
+                if (wakeLockStatus) {
+                    wakeLockStatus.textContent = '';
+                }
+            });
+        } catch (err) {
+            console.error('Wake lock failed:', err);
+            if (wakeLockStatus) {
+                wakeLockStatus.textContent = '(Failed)';
+            }
+            if (keepAwakeToggle) {
+                keepAwakeToggle.checked = false;
+            }
+        }
+    }
+    
+    async function releaseWakeLock() {
+        if (wakeLock) {
+            await wakeLock.release();
+            wakeLock = null;
+            if (wakeLockStatus) {
+                wakeLockStatus.textContent = '';
+            }
+            console.log('Wake lock released manually');
+        }
     }
     
     function bindEvents() {
@@ -64,26 +116,55 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         // Vulnerable toggle
-        vulnerableToggle.addEventListener('change', () => {
-            isVulnerable = vulnerableToggle.checked;
-            updateDisplay();
-            calculate();
+        if (vulnerableToggle) {
+            vulnerableToggle.addEventListener('change', () => {
+                isVulnerable = vulnerableToggle.checked;
+                updateDisplay();
+                calculate();
+            });
+        }
+        
+        // Keep Awake toggle
+        if (keepAwakeToggle) {
+            keepAwakeToggle.addEventListener('change', async () => {
+                if (keepAwakeToggle.checked) {
+                    await requestWakeLock();
+                } else {
+                    await releaseWakeLock();
+                }
+            });
+        }
+        
+        // Handle visibility change (when tab becomes hidden/visible)
+        document.addEventListener('visibilitychange', async () => {
+            if (wakeLock !== null && document.visibilityState === 'visible' && 
+                keepAwakeToggle && keepAwakeToggle.checked) {
+                await requestWakeLock();
+            }
         });
         
         // Clear button
-        clearBtn.addEventListener('click', () => {
-            clearCalculator();
-        });
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                clearCalculator();
+            });
+        }
         
         // Breakdown button
-        breakdownBtn.addEventListener('click', () => {
-            showBreakdown();
-        });
+        if (breakdownBtn) {
+            breakdownBtn.addEventListener('click', () => {
+                showBreakdown();
+            });
+        }
         
         // Close modal
-        closeModal.addEventListener('click', () => {
-            breakdownModal.style.display = 'none';
-        });
+        if (closeModal) {
+            closeModal.addEventListener('click', () => {
+                if (breakdownModal) {
+                    breakdownModal.style.display = 'none';
+                }
+            });
+        }
         
         // Click outside modal to close
         window.addEventListener('click', (event) => {
@@ -94,9 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Calculator switcher buttons
         if (regularCalcBtn) {
-            console.log("Regular calculator button found:", !!regularCalcBtn);
             regularCalcBtn.addEventListener('click', () => {
-                console.log("Adding click event to 123 button");
                 switchToRegularCalculator();
             });
         }
@@ -188,8 +267,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function updateDisplay() {
         if (!currentLevel || !currentSuit) {
-            contractDisplay.textContent = '';
-            contractStateDisplay.textContent = '';
+            if (contractDisplay) contractDisplay.textContent = '';
+            if (contractStateDisplay) contractStateDisplay.textContent = '';
             return;
         }
         
@@ -200,7 +279,9 @@ document.addEventListener('DOMContentLoaded', function() {
         else if (suitSymbol === 'H') suitSymbol = '♥';
         else if (suitSymbol === 'S') suitSymbol = '♠';
         
-        contractDisplay.textContent = `${currentLevel}${suitSymbol}`;
+        if (contractDisplay) {
+            contractDisplay.textContent = `${currentLevel}${suitSymbol}`;
+        }
         
         let stateText = '';
         
@@ -223,13 +304,15 @@ document.addEventListener('DOMContentLoaded', function() {
             stateText += 'XX';
         }
         
-        contractStateDisplay.textContent = stateText;
+        if (contractStateDisplay) {
+            contractStateDisplay.textContent = stateText;
+        }
     }
     
     function calculate() {
         try {
             if (!currentLevel || !currentSuit) {
-                resultDisplay.textContent = '';
+                if (resultDisplay) resultDisplay.textContent = '';
                 return;
             }
             
@@ -246,17 +329,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 doubledState === 'redoubled'
             );
             
-            resultDisplay.textContent = score;
-            
-            if (score >= 0) {
-                resultDisplay.style.color = '#27ae60';
-            } else {
-                resultDisplay.style.color = '#e74c3c';
+            if (resultDisplay) {
+                resultDisplay.textContent = score;
+                
+                if (score >= 0) {
+                    resultDisplay.style.color = '#27ae60';
+                } else {
+                    resultDisplay.style.color = '#e74c3c';
+                }
             }
         } catch (error) {
             console.error('Calculation error:', error);
-            resultDisplay.textContent = 'Error';
-            resultDisplay.style.color = '#e74c3c';
+            if (resultDisplay) {
+                resultDisplay.textContent = 'Error';
+                resultDisplay.style.color = '#e74c3c';
+            }
         }
     }
     
@@ -268,11 +355,11 @@ document.addEventListener('DOMContentLoaded', function() {
         isVulnerable = false;
         
         clearSelection('.btn.selected');
-        vulnerableToggle.checked = false;
+        if (vulnerableToggle) vulnerableToggle.checked = false;
         
-        contractDisplay.textContent = '';
-        contractStateDisplay.textContent = '';
-        resultDisplay.textContent = '';
+        if (contractDisplay) contractDisplay.textContent = '';
+        if (contractStateDisplay) contractStateDisplay.textContent = '';
+        if (resultDisplay) resultDisplay.textContent = '';
         
         if (!isInitial) {
             console.log("Calculator cleared");
@@ -323,43 +410,49 @@ document.addEventListener('DOMContentLoaded', function() {
             content += `<div>Vulnerable: ${isVulnerable ? 'Yes' : 'No'}</div>`;
             content += `<div>Tricks: ${currentTricks}/${contractTricks}</div>`;
             content += `<div>Down: ${contractTricks - currentTricks}</div>`;
-            content += `<div>Total: ${resultDisplay.textContent}</div>`;
+            content += `<div>Total: ${resultDisplay ? resultDisplay.textContent : 'N/A'}</div>`;
         }
         
-        breakdownContent.innerHTML = content;
-        breakdownModal.style.display = 'block';
+        if (breakdownContent) {
+            breakdownContent.innerHTML = content;
+        }
+        if (breakdownModal) {
+            breakdownModal.style.display = 'block';
+        }
     }
     
     // Calculator switching functions
     function switchToRegularCalculator() {
-        document.getElementById('bridge-calculator').style.display = 'none';
-        document.getElementById('regular-calculator').style.display = 'block';
-        if (document.getElementById('currency-calculator')) {
-            document.getElementById('currency-calculator').style.display = 'none';
-        }
-        console.log("Switching to regular calculator");
+        const bridgeCalc = document.getElementById('bridge-calculator');
+        const regularCalc = document.getElementById('regular-calculator');
+        const currencyCalc = document.getElementById('currency-calculator');
+        
+        if (bridgeCalc) bridgeCalc.style.display = 'none';
+        if (regularCalc) regularCalc.style.display = 'block';
+        if (currencyCalc) currencyCalc.style.display = 'none';
     }
     
     function switchToCurrencyCalculator() {
-        document.getElementById('bridge-calculator').style.display = 'none';
-        document.getElementById('regular-calculator').style.display = 'none';
-        if (document.getElementById('currency-calculator')) {
-            document.getElementById('currency-calculator').style.display = 'block';
+        const bridgeCalc = document.getElementById('bridge-calculator');
+        const regularCalc = document.getElementById('regular-calculator');
+        const currencyCalc = document.getElementById('currency-calculator');
+        
+        if (bridgeCalc) bridgeCalc.style.display = 'none';
+        if (regularCalc) regularCalc.style.display = 'none';
+        if (currencyCalc) {
+            currencyCalc.style.display = 'block';
         } else {
             alert("Currency calculator coming soon!");
         }
     }
     
     function switchToBridgeCalculator() {
-        document.getElementById('regular-calculator').style.display = 'none';
-        if (document.getElementById('currency-calculator')) {
-            document.getElementById('currency-calculator').style.display = 'none';
-        }
-        document.getElementById('bridge-calculator').style.display = 'block';
+        const bridgeCalc = document.getElementById('bridge-calculator');
+        const regularCalc = document.getElementById('regular-calculator');
+        const currencyCalc = document.getElementById('currency-calculator');
+        
+        if (regularCalc) regularCalc.style.display = 'none';
+        if (currencyCalc) currencyCalc.style.display = 'none';
+        if (bridgeCalc) bridgeCalc.style.display = 'block';
     }
-    
-    // You can test calculator switching directly in the console
-    console.log("You can test calculator switching directly in the console by running:");
-    console.log("document.getElementById('bridge-calculator').style.display = 'none';");
-    console.log("document.getElementById('regular-calculator').style.display = 'block';");
 });
