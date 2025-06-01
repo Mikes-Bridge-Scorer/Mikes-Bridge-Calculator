@@ -1,4 +1,5 @@
-    // Get the active tab
+// Force update: January 28, 2025
+// Get the active tab
         const activeTab = document.querySelector('.tab-button.active');
         if (activeTab) {
             const tabName = activeTab.getAttribute('data-tab');
