@@ -208,15 +208,17 @@ function initializeCurrencyCalculator() {
         // Add helpful message about scrolling
         const helpMessage = document.createElement('div');
         helpMessage.style.cssText = `
-            text-align: center; font-size: 12px; color: #7f8c8d; margin-top: 5px;
-            padding: 4px; background: #ecf0f1; border-radius: 4px;
+            text-align: center; font-size: 11px; color: #7f8c8d; margin: 8px 0;
+            padding: 6px 12px; background: #ecf0f1; border-radius: 15px;
+            width: 100%; box-sizing: border-box; display: block;
+            border: 1px solid #bdc3c7; font-weight: 500;
         `;
         helpMessage.textContent = '💡 Scroll in dropdowns to see all crypto & currencies';
         
-        // Insert message after currency selects
-        const currencyContainer = fromCurrencySelect.parentElement;
-        if (currencyContainer) {
-            currencyContainer.appendChild(helpMessage);
+        // Insert message after the currency calculator display
+        const display = document.getElementById('currencyCalcDisplay');
+        if (display && display.parentElement) {
+            display.parentElement.insertBefore(helpMessage, display.nextSibling);
         }
         
         console.log('Currency selectors populated with crypto support');
@@ -354,14 +356,17 @@ function initializeCurrencyCalculator() {
             });
         }
         
-        // Create SVG chart with crypto-specific styling
+        // Create SVG chart with better visibility
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         svg.setAttribute('width', '100%');
         svg.setAttribute('height', '60');
         svg.setAttribute('viewBox', '0 0 280 60');
-        svg.style.backgroundColor = isCryptoChart ? '#2c3e50' : '#f8f9fa';
+        
+        // Use light background for better visibility
+        svg.style.backgroundColor = '#ffffff';
         svg.style.borderRadius = '6px';
-        svg.style.border = isCryptoChart ? '1px solid #f39c12' : '1px solid #dee2e6';
+        svg.style.border = isCryptoChart ? '2px solid #f39c12' : '1px solid #dee2e6';
+        svg.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
         
         // Calculate chart dimensions
         const margin = { top: 5, right: 10, bottom: 15, left: 10 };
