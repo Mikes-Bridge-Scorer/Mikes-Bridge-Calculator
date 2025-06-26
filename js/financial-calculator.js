@@ -399,14 +399,38 @@ function initializeCurrencyCalculator() {
         path.setAttribute('fill', 'none');
         svg.appendChild(path);
         
-        // Add current rate label
+        // Add some data points for better visibility
+        chartData.forEach((point, index) => {
+            if (index % 5 === 0) { // Show every 5th point
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', xScale(index));
+                circle.setAttribute('cy', yScale(point.rate));
+                circle.setAttribute('r', '1.5');
+                circle.setAttribute('fill', isCryptoChart ? '#f39c12' : '#3498db');
+                svg.appendChild(circle);
+            }
+        });
+        
+        // Add current rate label with better visibility
         const rateLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         rateLabel.setAttribute('x', '270');
         rateLabel.setAttribute('y', '15');
         rateLabel.setAttribute('text-anchor', 'end');
-        rateLabel.setAttribute('font-size', '10');
+        rateLabel.setAttribute('font-size', '11');
         rateLabel.setAttribute('font-weight', 'bold');
-        rateLabel.setAttribute('fill', isCryptoChart ? '#ffffff' : '#2c3e50');
+        rateLabel.setAttribute('fill', isCryptoChart ? '#e67e22' : '#2c3e50');
+        
+        // Add background rectangle for better text visibility
+        const textBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        textBg.setAttribute('x', '200');
+        textBg.setAttribute('y', '5');
+        textBg.setAttribute('width', '75');
+        textBg.setAttribute('height', '16');
+        textBg.setAttribute('fill', 'rgba(255,255,255,0.9)');
+        textBg.setAttribute('rx', '3');
+        textBg.setAttribute('stroke', isCryptoChart ? '#f39c12' : '#3498db');
+        textBg.setAttribute('stroke-width', '1');
+        svg.appendChild(textBg);
         
         // Format rate display based on value
         let displayRate;
