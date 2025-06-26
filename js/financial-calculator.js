@@ -205,6 +205,20 @@ function initializeCurrencyCalculator() {
         fromCurrencySelect.value = 'BTC';
         toCurrencySelect.value = 'USD';
         
+        // Add helpful message about scrolling
+        const helpMessage = document.createElement('div');
+        helpMessage.style.cssText = `
+            text-align: center; font-size: 12px; color: #7f8c8d; margin-top: 5px;
+            padding: 4px; background: #ecf0f1; border-radius: 4px;
+        `;
+        helpMessage.textContent = '💡 Scroll in dropdowns to see all crypto & currencies';
+        
+        // Insert message after currency selects
+        const currencyContainer = fromCurrencySelect.parentElement;
+        if (currencyContainer) {
+            currencyContainer.appendChild(helpMessage);
+        }
+        
         console.log('Currency selectors populated with crypto support');
         
         // Trigger initial conversion
@@ -345,7 +359,7 @@ function initializeCurrencyCalculator() {
         svg.setAttribute('width', '100%');
         svg.setAttribute('height', '60');
         svg.setAttribute('viewBox', '0 0 280 60');
-        svg.style.backgroundColor = isCryptoChart ? '#1a1a2e' : '#f8f9fa';
+        svg.style.backgroundColor = isCryptoChart ? '#2c3e50' : '#f8f9fa';
         svg.style.borderRadius = '6px';
         svg.style.border = isCryptoChart ? '1px solid #f39c12' : '1px solid #dee2e6';
         
@@ -387,7 +401,7 @@ function initializeCurrencyCalculator() {
         rateLabel.setAttribute('text-anchor', 'end');
         rateLabel.setAttribute('font-size', '10');
         rateLabel.setAttribute('font-weight', 'bold');
-        rateLabel.setAttribute('fill', isCryptoChart ? '#f39c12' : '#2c3e50');
+        rateLabel.setAttribute('fill', isCryptoChart ? '#ffffff' : '#2c3e50');
         
         // Format rate display based on value
         let displayRate;
