@@ -2,19 +2,96 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#4CAF50">
-    <meta name="description" content="Offline Bridge Scoring Calculator">
-    <title>Bridge Scoring Calculator v2</title>
+    <meta name="description" content="Offline Bridge Scoring Calculator with Cryptocurrency Support">
+    <title>Bridge Scoring Calculator</title>
+    
+    <!-- PWA Mobile Optimizations -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+    <!-- Prevent mobile browser UI interference -->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    
     <link rel="stylesheet" href="css/styles.css">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="img/favicon.ico">
     <link rel="apple-touch-icon" href="img/icon-192.png">
+    
     <style>
+        /* Critical mobile fixes - must be in HTML head */
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            position: fixed;
+            height: 100%;
+            overflow: hidden;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: none;
+        }
+
+        body {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            overscroll-behavior: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Main app container */
+        .app-container {
+            width: 100%;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: contain;
+        }
+
+        /* Calculator specific fixes */
+        .calculator {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow: visible;
+        }
+
+        /* Prevent text selection on interactive elements */
+        button, .calc-key, select, .btn {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        /* Safe area support for notched devices */
+        @supports (padding: max(0px)) {
+            .app-container {
+                padding-left: env(safe-area-inset-left);
+                padding-right: env(safe-area-inset-right);
+                padding-top: env(safe-area-inset-top);
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+        }
+        
         /* Additional styles for new features */
         .settings {
             display: flex;
-            flex-direction: row;
+            flex-direction: column;
             gap: 10px;
             padding: 10px;
         }
@@ -108,198 +185,206 @@
                 justify-content: center;
             }
         }
+        
+        /* Prevent zoom on mobile inputs */
+        input, select, textarea {
+            font-size: 16px !important;
+            transform-origin: left top;
+        }
     </style>
 </head>
 <body>
-    <!-- Bridge Calculator -->
-    <div class="calculator" id="bridge-calculator">
-        <div class="display">
-            <div class="contract-display" id="contractDisplay"></div>
-            
-            <div class="result-display" id="resultDisplay"></div>
-            <div class="contract-state-display" id="contractStateDisplay"></div>
-        </div>
-        
-        <div class="settings">
-            <div class="settings-row">
-                <label class="switch">
-                    <input type="checkbox" id="vulnerableToggle">
-                    <span class="slider"></span>
-                    <span class="label">Vulnerable</span>
-                </label>
+    <div class="app-container">
+        <!-- Bridge Calculator -->
+        <div class="calculator" id="bridge-calculator">
+            <div class="display">
+                <div class="contract-display" id="contractDisplay"></div>
                 
-                <label class="switch">
-                    <input type="checkbox" id="keepAwakeToggle">
-                    <span class="slider"></span>
-                    <span class="label">Keep Awake</span>
-                    <span class="wake-lock-status" id="wakeLockStatus"></span>
-                </label>
+                <div class="result-display" id="resultDisplay"></div>
+                <div class="contract-state-display" id="contractStateDisplay"></div>
             </div>
             
-            <div class="credits">
-                © 2025 Mike Smith - All Rights Reserved
-            </div>
-        </div>
-        
-        <div class="calculator-buttons">
-            <div class="button-row">
-                <button class="btn level" data-level="1">1</button>
-                <button class="btn level" data-level="2">2</button>
-                <button class="btn level" data-level="3">3</button>
-                <button class="btn level" data-level="4">4</button>
-                <button class="btn clear" id="clearBtn">C</button>
-            </div>
-            <div class="button-row">
-                <button class="btn level" data-level="5">5</button>
-                <button class="btn level" data-level="6">6</button>
-                <button class="btn level" data-level="7">7</button>
-                <button class="btn contract-state" data-state="doubled">X</button>
-                <button class="btn contract-state" data-state="redoubled">XX</button>
-            </div>
-            <div class="button-row">
-                <button class="btn suit clubs" data-suit="C">♣</button>
-                <button class="btn suit diamonds" data-suit="D">♦</button>
-                <button class="btn suit hearts" data-suit="H">♥</button>
-                <button class="btn suit spades" data-suit="S">♠</button>
-                <button class="btn suit" data-suit="NT">NT</button>
-            </div>
-            <div class="button-row">
-                <button class="btn trick minus-trick" data-trick="-1">-1</button>
-                <button class="btn trick minus-trick" data-trick="-2">-2</button>
-                <button class="btn trick minus-trick" data-trick="-3">-3</button>
-                <button class="btn trick minus-trick" data-trick="-4">-4</button>
-                <button class="btn trick minus-trick" data-trick="-5">-5</button>
-            </div>
-            <div class="button-row">
-                <button class="btn trick plus-trick" data-trick="+1">+1</button>
-                <button class="btn trick plus-trick" data-trick="+2">+2</button>
-                <button class="btn trick plus-trick" data-trick="+3">+3</button>
-                <button class="btn trick plus-trick" data-trick="+4">+4</button>
-                <button class="btn trick plus-trick" data-trick="+5">+5</button>
-            </div>
-            <div class="button-row">
-                <button class="btn trick minus-trick" data-trick="-6">-6</button>
-                <button class="btn trick plus-trick" data-trick="+6">+6</button>
-                <button class="btn breakdown" id="breakdownBtn">📋</button>
-                <button class="btn calc-switcher" id="currencyCalcBtn">£/€/$</button>
-                <button class="btn calc-switcher" id="regularCalcBtn">123</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Bridge calculator breakdown modal -->
-    <div class="modal" id="breakdownModal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Score Breakdown</h2>
-            <div id="breakdownContent"></div>
-        </div>
-    </div>
-
-    <!-- Regular calculator (initially hidden) -->
-    <div class="calculator" id="regular-calculator" style="display: none;">
-        <div class="display">
-            <div class="expression-display" id="expressionDisplay"></div>
-            <div class="result-display" id="regularCalcDisplay">0</div>
-        </div>
-        
-        <div class="calculator-buttons">
-            <div class="button-row">
-                <button class="btn calc-key" data-action="clear">C</button>
-                <button class="btn calc-key" data-action="ce">CE</button>
-                <button class="btn calc-key" data-action="percent">%</button>
-                <button class="btn calc-key operator" data-action="operator">÷</button>
-            </div>
-            <div class="button-row">
-                <button class="btn calc-key number" data-value="7">7</button>
-                <button class="btn calc-key number" data-value="8">8</button>
-                <button class="btn calc-key number" data-value="9">9</button>
-                <button class="btn calc-key operator" data-action="operator">×</button>
-            </div>
-            <div class="button-row">
-                <button class="btn calc-key number" data-value="4">4</button>
-                <button class="btn calc-key number" data-value="5">5</button>
-                <button class="btn calc-key number" data-value="6">6</button>
-                <button class="btn calc-key operator" data-action="operator">-</button>
-            </div>
-            <div class="button-row">
-                <button class="btn calc-key number" data-value="1">1</button>
-                <button class="btn calc-key number" data-value="2">2</button>
-                <button class="btn calc-key number" data-value="3">3</button>
-                <button class="btn calc-key operator" data-action="operator">+</button>
-            </div>
-            <div class="button-row">
-                <button class="btn calc-key number" data-value="0">0</button>
-                <button class="btn calc-key number" data-value=".">.</button>
-                <button class="btn calc-key" data-action="sqrt">√</button>
-                <button class="btn calc-key equals" data-action="calculate">=</button>
-            </div>
-            <div class="button-row bottom-buttons">
-                <button class="btn calc-switcher bridge-btn" id="bridgeCalcBtn">Bridge</button>
-                <button class="btn calc-switcher currency-btn" id="currencyCalcBtnFromReg">£/€/$</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Enhanced Currency calculator with 40+ currencies and better chart -->
-    <div class="calculator" id="currency-calculator" style="display: none;">
-        <div class="display currency-display">
-            <div class="currency-info">
-                <div class="currency-selection">
-                    <select id="fromCurrency" class="currency-select">
-                        <!-- Options will be populated by JavaScript -->
-                    </select>
-                    <span class="currency-arrow">→</span>
-                    <select id="toCurrency" class="currency-select">
-                        <!-- Options will be populated by JavaScript -->
-                    </select>
+            <div class="settings">
+                <div class="settings-row">
+                    <label class="switch">
+                        <input type="checkbox" id="vulnerableToggle">
+                        <span class="slider"></span>
+                        <span class="label">Vulnerable</span>
+                    </label>
+                    
+                    <label class="switch">
+                        <input type="checkbox" id="keepAwakeToggle">
+                        <span class="slider"></span>
+                        <span class="label">Keep Awake</span>
+                        <span class="wake-lock-status" id="wakeLockStatus"></span>
+                    </label>
                 </div>
                 
-                <div id="lastUpdated" class="last-updated">Rates updated: Loading...</div>
-                <div class="result-display" id="currencyCalcDisplay">0</div>
-                
-                <!-- Enhanced chart container -->
-                <div class="enhanced-chart-container">
-                    <div id="rateChart" class="enhanced-chart"></div>
+                <div class="credits">
+                    © 2025 Mike Smith - All Rights Reserved
+                </div>
+            </div>
+            
+            <div class="calculator-buttons">
+                <div class="button-row">
+                    <button class="btn level" data-level="1">1</button>
+                    <button class="btn level" data-level="2">2</button>
+                    <button class="btn level" data-level="3">3</button>
+                    <button class="btn level" data-level="4">4</button>
+                    <button class="btn clear" id="clearBtn">C</button>
+                </div>
+                <div class="button-row">
+                    <button class="btn level" data-level="5">5</button>
+                    <button class="btn level" data-level="6">6</button>
+                    <button class="btn level" data-level="7">7</button>
+                    <button class="btn contract-state" data-state="doubled">X</button>
+                    <button class="btn contract-state" data-state="redoubled">XX</button>
+                </div>
+                <div class="button-row">
+                    <button class="btn suit clubs" data-suit="C">♣</button>
+                    <button class="btn suit diamonds" data-suit="D">♦</button>
+                    <button class="btn suit hearts" data-suit="H">♥</button>
+                    <button class="btn suit spades" data-suit="S">♠</button>
+                    <button class="btn suit" data-suit="NT">NT</button>
+                </div>
+                <div class="button-row">
+                    <button class="btn trick minus-trick" data-trick="-1">-1</button>
+                    <button class="btn trick minus-trick" data-trick="-2">-2</button>
+                    <button class="btn trick minus-trick" data-trick="-3">-3</button>
+                    <button class="btn trick minus-trick" data-trick="-4">-4</button>
+                    <button class="btn trick minus-trick" data-trick="-5">-5</button>
+                </div>
+                <div class="button-row">
+                    <button class="btn trick plus-trick" data-trick="+1">+1</button>
+                    <button class="btn trick plus-trick" data-trick="+2">+2</button>
+                    <button class="btn trick plus-trick" data-trick="+3">+3</button>
+                    <button class="btn trick plus-trick" data-trick="+4">+4</button>
+                    <button class="btn trick plus-trick" data-trick="+5">+5</button>
+                </div>
+                <div class="button-row">
+                    <button class="btn trick minus-trick" data-trick="-6">-6</button>
+                    <button class="btn trick plus-trick" data-trick="+6">+6</button>
+                    <button class="btn breakdown" id="breakdownBtn">📋</button>
+                    <button class="btn calc-switcher" id="currencyCalcBtn">£/€/$</button>
+                    <button class="btn calc-switcher" id="regularCalcBtn">123</button>
                 </div>
             </div>
         </div>
         
-        <div class="calculator-buttons">
-            <div class="button-row">
-                <button class="btn calc-key" data-action="clear">C</button>
-                <button class="btn calc-key" data-action="backspace">⌫</button>
-                <button class="btn calc-key refresh-btn" data-action="refresh" id="refreshRates">↻</button>
-            </div>
-            <div class="button-row">
-                <button class="btn calc-key" data-value="7">7</button>
-                <button class="btn calc-key" data-value="8">8</button>
-                <button class="btn calc-key" data-value="9">9</button>
-            </div>
-            <div class="button-row">
-                <button class="btn calc-key" data-value="4">4</button>
-                <button class="btn calc-key" data-value="5">5</button>
-                <button class="btn calc-key" data-value="6">6</button>
-            </div>
-            <div class="button-row">
-                <button class="btn calc-key" data-value="1">1</button>
-                <button class="btn calc-key" data-value="2">2</button>
-                <button class="btn calc-key" data-value="3">3</button>
-            </div>
-            <div class="button-row">
-                <button class="btn calc-key" data-value="0">0</button>
-                <button class="btn calc-key" data-value=".">.</button>
-                <button class="btn calc-key convert-btn" data-action="convert">Convert</button>
-            </div>
-            <div class="button-row bottom-buttons">
-                <button class="btn calc-switcher bridge-btn" id="bridgeCalcBtnFromCurr">Bridge</button>
-                <button class="btn calc-switcher" id="regularCalcBtnFromCurr">123</button>
+        <!-- Bridge calculator breakdown modal -->
+        <div class="modal" id="breakdownModal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Score Breakdown</h2>
+                <div id="breakdownContent"></div>
             </div>
         </div>
-    </div>
 
-    <div class="install-container">
-        <button id="installBtn" class="install-button">Install App</button>
+        <!-- Regular calculator (initially hidden) -->
+        <div class="calculator" id="regular-calculator" style="display: none;">
+            <div class="display">
+                <div class="expression-display" id="expressionDisplay"></div>
+                <div class="result-display" id="regularCalcDisplay">0</div>
+            </div>
+            
+            <div class="calculator-buttons">
+                <div class="button-row">
+                    <button class="btn calc-key" data-action="clear">C</button>
+                    <button class="btn calc-key" data-action="ce">CE</button>
+                    <button class="btn calc-key" data-action="percent">%</button>
+                    <button class="btn calc-key operator" data-action="operator">÷</button>
+                </div>
+                <div class="button-row">
+                    <button class="btn calc-key number" data-value="7">7</button>
+                    <button class="btn calc-key number" data-value="8">8</button>
+                    <button class="btn calc-key number" data-value="9">9</button>
+                    <button class="btn calc-key operator" data-action="operator">×</button>
+                </div>
+                <div class="button-row">
+                    <button class="btn calc-key number" data-value="4">4</button>
+                    <button class="btn calc-key number" data-value="5">5</button>
+                    <button class="btn calc-key number" data-value="6">6</button>
+                    <button class="btn calc-key operator" data-action="operator">-</button>
+                </div>
+                <div class="button-row">
+                    <button class="btn calc-key number" data-value="1">1</button>
+                    <button class="btn calc-key number" data-value="2">2</button>
+                    <button class="btn calc-key number" data-value="3">3</button>
+                    <button class="btn calc-key operator" data-action="operator">+</button>
+                </div>
+                <div class="button-row">
+                    <button class="btn calc-key number" data-value="0">0</button>
+                    <button class="btn calc-key number" data-value=".">.</button>
+                    <button class="btn calc-key" data-action="sqrt">√</button>
+                    <button class="btn calc-key equals" data-action="calculate">=</button>
+                </div>
+                <div class="button-row bottom-buttons">
+                    <button class="btn calc-switcher bridge-btn" id="bridgeCalcBtn">Bridge</button>
+                    <button class="btn calc-switcher currency-btn" id="currencyCalcBtnFromReg">£/€/$</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enhanced Currency calculator with crypto support -->
+        <div class="calculator" id="currency-calculator" style="display: none;">
+            <div class="display currency-display">
+                <div class="currency-info">
+                    <div class="currency-selection">
+                        <select id="fromCurrency" class="currency-select">
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                        <span class="currency-arrow">→</span>
+                        <select id="toCurrency" class="currency-select">
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    
+                    <div id="lastUpdated" class="last-updated">Rates updated: Loading...</div>
+                    <div class="result-display" id="currencyCalcDisplay">0</div>
+                    
+                    <!-- Enhanced chart container -->
+                    <div class="enhanced-chart-container">
+                        <div id="rateChart" class="enhanced-chart"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="calculator-buttons">
+                <div class="button-row">
+                    <button class="btn calc-key" data-action="clear">C</button>
+                    <button class="btn calc-key" data-action="backspace">⌫</button>
+                    <button class="btn calc-key refresh-btn" data-action="refresh" id="refreshRates">↻</button>
+                </div>
+                <div class="button-row">
+                    <button class="btn calc-key" data-value="7">7</button>
+                    <button class="btn calc-key" data-value="8">8</button>
+                    <button class="btn calc-key" data-value="9">9</button>
+                </div>
+                <div class="button-row">
+                    <button class="btn calc-key" data-value="4">4</button>
+                    <button class="btn calc-key" data-value="5">5</button>
+                    <button class="btn calc-key" data-value="6">6</button>
+                </div>
+                <div class="button-row">
+                    <button class="btn calc-key" data-value="1">1</button>
+                    <button class="btn calc-key" data-value="2">2</button>
+                    <button class="btn calc-key" data-value="3">3</button>
+                </div>
+                <div class="button-row">
+                    <button class="btn calc-key" data-value="0">0</button>
+                    <button class="btn calc-key" data-value=".">.</button>
+                    <button class="btn calc-key convert-btn" data-action="convert">Convert</button>
+                </div>
+                <div class="button-row bottom-buttons">
+                    <button class="btn calc-switcher bridge-btn" id="bridgeCalcBtnFromCurr">Bridge</button>
+                    <button class="btn calc-switcher" id="regularCalcBtnFromCurr">123</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="install-container">
+            <button id="installBtn" class="install-button">Install App</button>
+        </div>
     </div>
     
     <script src="js/BridgeScoring.js"></script>
@@ -387,5 +472,13 @@
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('service-worker.js')
                     .then(registration => {
-                        console.log('Service
-                                    <!-- updated -->)
+                        console.log('Service Worker registered with scope:', registration.scope);
+                    })
+                    .catch(error => {
+                        console.log('Service Worker registration failed (this is normal in development):', error.message);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
