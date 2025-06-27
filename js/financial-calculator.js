@@ -1,10 +1,80 @@
-// Enhanced financial-calculator.js - Now with cryptocurrency support
+// Enhanced financial-calculator.js - Fixed for mobile UI stability and crypto support
 document.addEventListener('DOMContentLoaded', function() {
-    console.log("Enhanced financial calculator with crypto support loaded!");
+    console.log("Enhanced financial calculator with crypto support and mobile fixes loaded!");
+    
+    // Apply critical mobile fixes immediately
+    applyMobileFixes();
     
     // Wait a bit longer for all elements to be ready on mobile
     setTimeout(initializeCurrencyCalculator, 100);
 });
+
+function applyMobileFixes() {
+    // Fix mobile UI stability issues
+    const style = document.createElement('style');
+    style.textContent = `
+        /* Prevent UI floating and fix mobile scroll issues */
+        html, body {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: none;
+        }
+        
+        /* Main app container with proper scrolling */
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Fix calculator container */
+        #currency-calculator {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            height: 100vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-y: contain;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        
+        /* Prevent text selection on UI elements */
+        .calc-key, button, select {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+        }
+        
+        /* Fix viewport for PWA */
+        @supports (padding: max(0px)) {
+            body {
+                padding-left: env(safe-area-inset-left);
+                padding-right: env(safe-area-inset-right);
+                padding-top: env(safe-area-inset-top);
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+        }
+        
+        /* Prevent zoom on mobile */
+        input, select, textarea {
+            font-size: 16px !important;
+            transform-origin: left top;
+        }
+    `;
+    document.head.appendChild(style);
+}
 
 function initializeCurrencyCalculator() {
     // Get UI elements with error checking
@@ -356,17 +426,19 @@ function initializeCurrencyCalculator() {
             });
         }
         
-        // Create SVG chart with better visibility
+        // Create SVG chart with perfect visibility
         const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         svg.setAttribute('width', '100%');
         svg.setAttribute('height', '60');
         svg.setAttribute('viewBox', '0 0 280 60');
         
-        // Use light background for better visibility
+        // Always use white background with visible content
         svg.style.backgroundColor = '#ffffff';
         svg.style.borderRadius = '6px';
-        svg.style.border = isCryptoChart ? '2px solid #f39c12' : '1px solid #dee2e6';
+        svg.style.border = isCryptoChart ? '2px solid #f39c12' : '1px solid #3498db';
         svg.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+        svg.style.display = 'block';
+        svg.style.width = '100%';
         
         // Calculate chart dimensions
         const margin = { top: 5, right: 10, bottom: 15, left: 10 };
@@ -411,25 +483,26 @@ function initializeCurrencyCalculator() {
             }
         });
         
-        // Add current rate label with better visibility
+        // Add enhanced rate label with perfect visibility
         const rateLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         rateLabel.setAttribute('x', '270');
         rateLabel.setAttribute('y', '15');
         rateLabel.setAttribute('text-anchor', 'end');
-        rateLabel.setAttribute('font-size', '11');
+        rateLabel.setAttribute('font-size', '12');
         rateLabel.setAttribute('font-weight', 'bold');
-        rateLabel.setAttribute('fill', isCryptoChart ? '#e67e22' : '#2c3e50');
+        rateLabel.setAttribute('fill', '#2c3e50');
+        rateLabel.setAttribute('font-family', 'Arial, sans-serif');
         
-        // Add background rectangle for better text visibility
+        // Add white background rectangle for perfect text visibility
         const textBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        textBg.setAttribute('x', '200');
+        textBg.setAttribute('x', '190');
         textBg.setAttribute('y', '5');
-        textBg.setAttribute('width', '75');
-        textBg.setAttribute('height', '16');
-        textBg.setAttribute('fill', 'rgba(255,255,255,0.9)');
-        textBg.setAttribute('rx', '3');
+        textBg.setAttribute('width', '85');
+        textBg.setAttribute('height', '18');
+        textBg.setAttribute('fill', '#ffffff');
+        textBg.setAttribute('rx', '4');
         textBg.setAttribute('stroke', isCryptoChart ? '#f39c12' : '#3498db');
-        textBg.setAttribute('stroke-width', '1');
+        textBg.setAttribute('stroke-width', '1.5');
         svg.appendChild(textBg);
         
         // Format rate display based on value
