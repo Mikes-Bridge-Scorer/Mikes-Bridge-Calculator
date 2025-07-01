@@ -91,54 +91,81 @@
         
         /* PIXEL FIX: Special fix for Pixel phones reporting wide screens (like 980px) */
         @media (min-width: 600px) and (max-width: 1200px) {
-            .container {
+            /* Main calculator container */
+            .calculator {
                 max-width: 85vw;
                 min-height: 85vh;
                 margin: 2vh auto;
                 padding: 2vw;
-                gap: 1vh;
             }
 
+            /* All buttons get proper sizing */
             .btn {
                 min-height: 8vh;
                 font-size: 4vw;
+                padding: 2vh 1vw;
             }
 
+            /* Suit buttons get slightly larger text */
             .btn[data-suit] {
                 font-size: 5vw;
             }
 
+            /* NT button gets smaller text to fit */
             .btn[data-suit="NT"] {
                 font-size: 3.5vw;
             }
 
+            /* Display areas */
             .display {
                 min-height: 12vh;
                 padding: 3vh 2vw;
+                font-size: 4vw;
             }
 
-            .score-display {
+            .result-display {
                 font-size: 6vw;
+                min-height: 8vh;
             }
 
             .contract-display {
+                font-size: 4vw;
+            }
+
+            .contract-state-display {
                 font-size: 3vw;
             }
 
-            .toggle {
-                font-size: 2.5vw;
-                padding: 1vh 2vw;
+            /* Button rows */
+            .button-row {
+                gap: 1vw;
+                margin-bottom: 1vh;
             }
             
-            /* Apply same scaling to currency calculator elements */
+            /* Settings and toggles */
+            .settings {
+                padding: 2vw;
+                gap: 2vh;
+            }
+            
+            .label {
+                font-size: 3vw;
+            }
+            
+            .credits {
+                font-size: 2.5vw;
+            }
+            
+            /* Currency calculator specific */
             .currency-display {
                 min-height: 12vh;
                 padding: 3vh 2vw;
             }
             
             .currency-select {
-                font-size: 3vw;
+                font-size: 3.5vw;
                 min-height: 6vh;
+                padding: 1vh 2vw;
             }
             
             .last-updated {
@@ -147,6 +174,10 @@
             
             .enhanced-chart {
                 min-height: 8vh;
+            }
+            
+            .currency-arrow {
+                font-size: 4vw;
             }
             
             /* Regular calculator scaling */
@@ -158,12 +189,31 @@
             #regularCalcDisplay {
                 font-size: 6vw;
                 min-height: 8vh;
+                padding: 2vh 2vw;
             }
             
-            /* Bottom button row scaling */
-            .bottom-buttons .btn {
+            #currencyCalcDisplay {
+                font-size: 5vw;
+                min-height: 8vh;
+                padding: 2vh 2vw;
+            }
+            
+            /* Calculator keys for regular and currency calc */
+            .calc-key {
+                min-height: 8vh;
+                font-size: 4vw;
+            }
+            
+            /* Bottom navigation buttons */
+            .calc-switcher {
                 font-size: 3.5vw;
                 min-height: 7vh;
+            }
+            
+            /* Install button */
+            .install-button {
+                font-size: 3.5vw;
+                padding: 2vh 4vw;
             }
         }
         
