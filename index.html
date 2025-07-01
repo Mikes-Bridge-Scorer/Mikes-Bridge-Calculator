@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <!-- Enhanced viewport meta tag for Pixel fix -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover, maximum-scale=1.0, minimum-scale=1.0">
     <meta name="theme-color" content="#4CAF50">
     <meta name="description" content="Offline Bridge Scoring Calculator with Cryptocurrency Support">
     <title>Bridge Scoring Calculator</title>
@@ -85,6 +86,84 @@
                 padding-right: env(safe-area-inset-right);
                 padding-top: env(safe-area-inset-top);
                 padding-bottom: env(safe-area-inset-bottom);
+            }
+        }
+        
+        /* PIXEL FIX: Special fix for Pixel phones reporting wide screens (like 980px) */
+        @media (min-width: 600px) and (max-width: 1200px) {
+            .container {
+                max-width: 85vw;
+                min-height: 85vh;
+                margin: 2vh auto;
+                padding: 2vw;
+                gap: 1vh;
+            }
+
+            .btn {
+                min-height: 8vh;
+                font-size: 4vw;
+            }
+
+            .btn[data-suit] {
+                font-size: 5vw;
+            }
+
+            .btn[data-suit="NT"] {
+                font-size: 3.5vw;
+            }
+
+            .display {
+                min-height: 12vh;
+                padding: 3vh 2vw;
+            }
+
+            .score-display {
+                font-size: 6vw;
+            }
+
+            .contract-display {
+                font-size: 3vw;
+            }
+
+            .toggle {
+                font-size: 2.5vw;
+                padding: 1vh 2vw;
+            }
+            
+            /* Apply same scaling to currency calculator elements */
+            .currency-display {
+                min-height: 12vh;
+                padding: 3vh 2vw;
+            }
+            
+            .currency-select {
+                font-size: 3vw;
+                min-height: 6vh;
+            }
+            
+            .last-updated {
+                font-size: 2.5vw;
+            }
+            
+            .enhanced-chart {
+                min-height: 8vh;
+            }
+            
+            /* Regular calculator scaling */
+            .expression-display {
+                font-size: 3vw;
+                min-height: 4vh;
+            }
+            
+            #regularCalcDisplay {
+                font-size: 6vw;
+                min-height: 8vh;
+            }
+            
+            /* Bottom button row scaling */
+            .bottom-buttons .btn {
+                font-size: 3.5vw;
+                min-height: 7vh;
             }
         }
         
