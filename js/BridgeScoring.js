@@ -1,4 +1,4 @@
-// BridgeScoring.js
+// BridgeScoring.js - Fixed Version
 var BridgeScoring = (function() {
     // Constants for scoring calculations
     const TRICK_VALUES = {
@@ -108,25 +108,28 @@ var BridgeScoring = (function() {
                     return Object.values(this.breakdown).reduce((a, b) => a + b, 0);
 
                 } else {
-                    // Going down
+                    // Going down - FIXED CALCULATION
                     const undertricks = contractTricks - tricks;
                     let undertrickScore = 0;
 
-                    if (vulnerable) {
-                        if (redoubled) {
-                            undertrickScore = -(undertricks * 400);
-                        } else if (doubled) {
-                            undertrickScore = -(undertricks * 200);
-                        } else {
-                            undertrickScore = -(undertricks * 100);
-                        }
+                    if (!doubled && !redoubled) {
+                        // Standard penalties
+                        undertrickScore = -(undertricks * (vulnerable ? 100 : 50));
                     } else {
-                        if (redoubled) {
-                            undertrickScore = -(200 + ((undertricks - 1) * 400));
-                        } else if (doubled) {
-                            undertrickScore = -(100 + ((undertricks - 1) * 200));
+                        // Doubled/Redoubled penalties
+                        const multiplier = redoubled ? 2 : 1;
+                        
+                        if (vulnerable) {
+                            // Vulnerable: -200 per trick doubled, -400 per trick redoubled
+                            undertrickScore = -(undertricks * 200 * multiplier);
                         } else {
-                            undertrickScore = -(undertricks * 50);
+                            // Non-vulnerable: First trick -100 doubled/-200 redoubled, 
+                            // subsequent tricks -200 doubled/-400 redoubled
+                            if (undertricks === 1) {
+                                undertrickScore = -(100 * multiplier);
+                            } else {
+                                undertrickScore = -(100 * multiplier + (undertricks - 1) * 200 * multiplier);
+                            }
                         }
                     }
 
@@ -152,6 +155,14 @@ var BridgeScoring = (function() {
         getBreakdown() {
             return { ...this.breakdown };
         }
+
+        // Debug method to test specific scenarios
+        debugScore(description, level, suit, tricks, vulnerable, doubled = false, redoubled = false) {
+            const score = this.calculateScore(level, suit, tricks, vulnerable, doubled, redoubled);
+            console.log(`${description}: ${score}`);
+            console.log('Breakdown:', this.getBreakdown());
+            return score;
+        }
     }
 
     // Public interface
@@ -176,3 +187,10 @@ if (typeof module !== 'undefined' && module.exports) {
 if (typeof window !== 'undefined') {
     window.BridgeScoring = BridgeScoring;
 }
+
+// Test the fix - uncomment to verify the -500 score
+/*
+const scorer = BridgeScoring.createScorer();
+console.log("Testing 3NT doubled, non-vulnerable, going 5 down:");
+console.log(scorer.debugScore("3NT X -5 NV", 3, 'NT', 4, false, true, false)); // Should be -500
+*/
