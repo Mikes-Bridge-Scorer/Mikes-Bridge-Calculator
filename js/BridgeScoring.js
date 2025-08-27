@@ -108,7 +108,7 @@ var BridgeScoring = (function() {
                     return Object.values(this.breakdown).reduce((a, b) => a + b, 0);
 
                 } else {
-                    // Going down - FIXED CALCULATION
+                    // Going down - CORRECT BRIDGE SCORING RULES
                     const undertricks = contractTricks - tricks;
                     let undertrickScore = 0;
 
@@ -116,20 +116,33 @@ var BridgeScoring = (function() {
                         // Standard penalties
                         undertrickScore = -(undertricks * (vulnerable ? 100 : 50));
                     } else {
-                        // Doubled/Redoubled penalties
+                        // Doubled/Redoubled penalties according to official bridge rules
                         const multiplier = redoubled ? 2 : 1;
                         
                         if (vulnerable) {
-                            // Vulnerable: -200 per trick doubled, -400 per trick redoubled
-                            undertrickScore = -(undertricks * 200 * multiplier);
-                        } else {
-                            // Non-vulnerable: First trick -100 doubled/-200 redoubled, 
-                            // subsequent tricks -200 doubled/-400 redoubled
+                            // Vulnerable doubled: 1st = -200, 2nd+ = -300 each
                             if (undertricks === 1) {
-                                undertrickScore = -(100 * multiplier);
+                                undertrickScore = -(200 * multiplier);
                             } else {
-                                undertrickScore = -(100 * multiplier + (undertricks - 1) * 200 * multiplier);
+                                undertrickScore = -(200 * multiplier + (undertricks - 1) * 300 * multiplier);
                             }
+                        } else {
+                            // Non-vulnerable doubled: 1st = -100, 2nd & 3rd = -200 each, 4th+ = -300 each
+                            let penalty = 100 * multiplier; // First trick
+                            
+                            if (undertricks >= 2) {
+                                // Second and third tricks: -200 each (or -400 if redoubled)
+                                const secondThirdTricks = Math.min(undertricks - 1, 2);
+                                penalty += secondThirdTricks * 200 * multiplier;
+                            }
+                            
+                            if (undertricks >= 4) {
+                                // Fourth and subsequent tricks: -300 each (or -600 if redoubled)
+                                const fourthPlusTricks = undertricks - 3;
+                                penalty += fourthPlusTricks * 300 * multiplier;
+                            }
+                            
+                            undertrickScore = -penalty;
                         }
                     }
 
