@@ -107,23 +107,6 @@ function initializeCurrencyCalculator() {
     
     // Enhanced list with cryptocurrencies
     const currencies = [
-        // Major Cryptocurrencies (top section)
-        { code: 'BTC', name: 'Bitcoin', symbol: '₿', flag: '🪙', type: 'crypto' },
-        { code: 'ETH', name: 'Ethereum', symbol: 'Ξ', flag: '🔷', type: 'crypto' },
-        { code: 'BNB', name: 'Binance Coin', symbol: 'BNB', flag: '🟡', type: 'crypto' },
-        { code: 'XRP', name: 'Ripple', symbol: 'XRP', flag: '🌊', type: 'crypto' },
-        { code: 'ADA', name: 'Cardano', symbol: 'ADA', flag: '🔵', type: 'crypto' },
-        { code: 'SOL', name: 'Solana', symbol: 'SOL', flag: '🟣', type: 'crypto' },
-        { code: 'DOGE', name: 'Dogecoin', symbol: 'Ð', flag: '🐕', type: 'crypto' },
-        { code: 'DOT', name: 'Polkadot', symbol: 'DOT', flag: '⚫', type: 'crypto' },
-        { code: 'AVAX', name: 'Avalanche', symbol: 'AVAX', flag: '🔺', type: 'crypto' },
-        { code: 'MATIC', name: 'Polygon', symbol: 'MATIC', flag: '🟣', type: 'crypto' },
-        { code: 'LTC', name: 'Litecoin', symbol: 'Ł', flag: '⚡', type: 'crypto' },
-        { code: 'LINK', name: 'Chainlink', symbol: 'LINK', flag: '🔗', type: 'crypto' },
-        
-        // Separator for UI
-        { code: 'SEPARATOR', name: '────── Traditional Currencies ──────', type: 'separator' },
-        
         // Major fiat currencies
         { code: 'USD', name: 'US Dollar', symbol: '$', flag: '🇺🇸', type: 'fiat' },
         { code: 'EUR', name: 'Euro', symbol: '€', flag: '🇪🇺', type: 'fiat' },
@@ -161,7 +144,24 @@ function initializeCurrencyCalculator() {
         { code: 'ZAR', name: 'South African Rand', symbol: 'R', flag: '🇿🇦', type: 'fiat' },
         { code: 'ILS', name: 'Israeli Shekel', symbol: '₪', flag: '🇮🇱', type: 'fiat' },
         { code: 'AED', name: 'UAE Dirham', symbol: 'د.إ', flag: '🇦🇪', type: 'fiat' },
-        { code: 'TRY', name: 'Turkish Lira', symbol: '₺', flag: '🇹🇷', type: 'fiat' }
+        { code: 'TRY', name: 'Turkish Lira', symbol: '₺', flag: '🇹🇷', type: 'fiat' },
+
+        // Separator for UI
+        { code: 'SEPARATOR', name: '────── Cryptocurrencies ──────', type: 'separator' },
+
+        // Major cryptocurrencies
+        { code: 'BTC', name: 'Bitcoin', symbol: '₿', flag: '🪙', type: 'crypto' },
+        { code: 'ETH', name: 'Ethereum', symbol: 'Ξ', flag: '🔷', type: 'crypto' },
+        { code: 'BNB', name: 'Binance Coin', symbol: 'BNB', flag: '🟡', type: 'crypto' },
+        { code: 'XRP', name: 'Ripple', symbol: 'XRP', flag: '🌊', type: 'crypto' },
+        { code: 'ADA', name: 'Cardano', symbol: 'ADA', flag: '🔵', type: 'crypto' },
+        { code: 'SOL', name: 'Solana', symbol: 'SOL', flag: '🟣', type: 'crypto' },
+        { code: 'DOGE', name: 'Dogecoin', symbol: 'Ð', flag: '🐕', type: 'crypto' },
+        { code: 'DOT', name: 'Polkadot', symbol: 'DOT', flag: '⚫', type: 'crypto' },
+        { code: 'AVAX', name: 'Avalanche', symbol: 'AVAX', flag: '🔺', type: 'crypto' },
+        { code: 'MATIC', name: 'Polygon', symbol: 'MATIC', flag: '🟣', type: 'crypto' },
+        { code: 'LTC', name: 'Litecoin', symbol: 'Ł', flag: '⚡', type: 'crypto' },
+        { code: 'LINK', name: 'Chainlink', symbol: 'LINK', flag: '🔗', type: 'crypto' }
     ];
     
     // Enhanced conversion rates structure
@@ -271,8 +271,8 @@ function initializeCurrencyCalculator() {
             }
         });
         
-        // Set default selections - Bitcoin to USD for demo
-        fromCurrencySelect.value = 'BTC';
+        // Set default selections - GBP to USD
+        fromCurrencySelect.value = 'GBP';
         toCurrencySelect.value = 'USD';
         
         // Add helpful message about scrolling
