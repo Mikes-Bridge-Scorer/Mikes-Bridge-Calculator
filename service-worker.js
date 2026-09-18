@@ -1,18 +1,18 @@
 // service-worker.js - Bridge Calculator PWA Service Worker
-const CACHE_NAME = 'bridge-calculator-v1.3.0';
+const CACHE_NAME = 'bridge-calculator-v1.4.0';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/css/styles.css',
-  '/js/app.js',
-  '/js/BridgeScoring.js',
-  '/js/regular-calculator.js',
-  '/js/financial-calculator.js',
-  '/js/install.js',
-  '/manifest.json',
-  '/img/icon-192.png',
-  '/img/icon-512.png',
-  '/img/favicon.ico'
+  './',
+  './index.html',
+  './css/styles.css',
+  './js/app.js',
+  './js/BridgeScoring.js',
+  './js/regular-calculator.js',
+  './js/financial-calculator.js',
+  './js/install.js',
+  './manifest.json',
+  './img/icon-192.png',
+  './img/icon-512.png',
+  './img/favicon.ico'
 ];
 
 // Install event - cache resources
@@ -91,7 +91,7 @@ self.addEventListener('fetch', function(event) {
             
             // Return offline fallback for HTML requests
             if (event.request.destination === 'document') {
-              return caches.match('/index.html');
+              return caches.match('./index.html');
             }
             
             return new Response('Offline content not available', {
@@ -127,8 +127,8 @@ self.addEventListener('push', function(event) {
     
     const options = {
       body: data.body || 'New notification from Bridge Calculator',
-      icon: '/img/icon-192.png',
-      badge: '/img/icon-192.png',
+      icon: './img/icon-192.png',
+      badge: './img/icon-192.png',
       data: data.url || '/'
     };
     
